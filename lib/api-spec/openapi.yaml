@@ -3,13 +3,21 @@ info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: CelebFanCards API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: celebrities
+    description: Celebrity operations
+  - name: orders
+    description: Order operations
+  - name: auth
+    description: Authentication operations
+  - name: stats
+    description: Stats and summary operations
 paths:
   /healthz:
     get:
@@ -24,6 +32,339 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /celebrities:
+    get:
+      operationId: listCelebrities
+      tags: [celebrities]
+      summary: List all celebrities
+      parameters:
+        - name: category
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: search
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of celebrities
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Celebrity"
+
+  /celebrities/{id}:
+    get:
+      operationId: getCelebrity
+      tags: [celebrities]
+      summary: Get a celebrity by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Celebrity details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Celebrity"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /categories:
+    get:
+      operationId: listCategories
+      tags: [celebrities]
+      summary: List celebrity categories
+      responses:
+        "200":
+          description: Categories with counts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CategoryCount"
+
+  /orders:
+    get:
+      operationId: listOrders
+      tags: [orders]
+      summary: List orders (for current session user)
+      parameters:
+        - name: userEmail
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of orders
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Order"
+    post:
+      operationId: createOrder
+      tags: [orders]
+      summary: Create a new fan card order
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateOrderBody"
+      responses:
+        "201":
+          description: Order created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /orders/{id}:
+    get:
+      operationId: getOrder
+      tags: [orders]
+      summary: Get an order by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Order details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /orders/{id}/status:
+    patch:
+      operationId: updateOrderStatus
+      tags: [orders]
+      summary: Update order payment status
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateOrderStatusBody"
+      responses:
+        "200":
+          description: Order updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /auth/signup:
+    post:
+      operationId: signUp
+      tags: [auth]
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SignUpBody"
+      responses:
+        "201":
+          description: User created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "409":
+          description: Email already exists
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /auth/login:
+    post:
+      operationId: login
+      tags: [auth]
+      summary: Login user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginBody"
+      responses:
+        "200":
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "401":
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /auth/me:
+    get:
+      operationId: getMe
+      tags: [auth]
+      summary: Get current user from session
+      responses:
+        "200":
+          description: Current user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "401":
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /auth/logout:
+    post:
+      operationId: logout
+      tags: [auth]
+      summary: Logout current user
+      responses:
+        "200":
+          description: Logged out
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+  /stats/summary:
+    get:
+      operationId: getStatsSummary
+      tags: [stats]
+      summary: Get site statistics
+      responses:
+        "200":
+          description: Site statistics
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StatsSummary"
+
+  /stats/popular:
+    get:
+      operationId: getPopularCelebrities
+      tags: [stats]
+      summary: Get most popular celebrities by order count
+      responses:
+        "200":
+          description: Popular celebrities
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PopularCelebrity"
+
+  /payment/initialize:
+    post:
+      operationId: initializePayment
+      tags: [orders]
+      summary: Initialize Flutterwave payment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/InitializePaymentBody"
+      responses:
+        "200":
+          description: Payment initialized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaymentInitResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /payment/verify:
+    post:
+      operationId: verifyPayment
+      tags: [orders]
+      summary: Verify Flutterwave payment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VerifyPaymentBody"
+      responses:
+        "200":
+          description: Payment verified
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaymentVerifyResponse"
+        "400":
+          description: Verification failed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
 components:
   schemas:
     HealthStatus:
@@ -34,3 +375,312 @@ components:
       required:
         - status
 
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+      required:
+        - error
+
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+      required:
+        - success
+
+    Celebrity:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        bio:
+          type: string
+        category:
+          type: string
+        imageUrl:
+          type: string
+        nationality:
+          type: ["string", "null"]
+        popularFor:
+          type: ["string", "null"]
+        fanCount:
+          type: integer
+        createdAt:
+          type: string
+      required:
+        - id
+        - name
+        - bio
+        - category
+        - imageUrl
+        - fanCount
+        - createdAt
+
+    CategoryCount:
+      type: object
+      properties:
+        category:
+          type: string
+        count:
+          type: integer
+      required:
+        - category
+        - count
+
+    Order:
+      type: object
+      properties:
+        id:
+          type: integer
+        confirmationNumber:
+          type: string
+        celebId:
+          type: integer
+        celebName:
+          type: string
+        cardType:
+          type: string
+        price:
+          type: number
+        status:
+          type: string
+        fullName:
+          type: string
+        email:
+          type: string
+        username:
+          type: string
+        phone:
+          type: ["string", "null"]
+        shippingAddress:
+          type: ["string", "null"]
+        specialMessage:
+          type: ["string", "null"]
+        paymentMethod:
+          type: ["string", "null"]
+        transactionId:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+      required:
+        - id
+        - confirmationNumber
+        - celebId
+        - celebName
+        - cardType
+        - price
+        - status
+        - fullName
+        - email
+        - username
+        - createdAt
+        - updatedAt
+
+    CreateOrderBody:
+      type: object
+      properties:
+        celebId:
+          type: integer
+        cardType:
+          type: string
+          enum: [basic, premium, vip]
+        fullName:
+          type: string
+        email:
+          type: string
+        username:
+          type: string
+        phone:
+          type: ["string", "null"]
+        shippingAddress:
+          type: ["string", "null"]
+        specialMessage:
+          type: ["string", "null"]
+      required:
+        - celebId
+        - cardType
+        - fullName
+        - email
+        - username
+
+    UpdateOrderStatusBody:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [pending, paid, failed, processing]
+        paymentMethod:
+          type: ["string", "null"]
+        transactionId:
+          type: ["string", "null"]
+      required:
+        - status
+
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        fullName:
+          type: string
+        email:
+          type: string
+        username:
+          type: string
+        createdAt:
+          type: string
+      required:
+        - id
+        - fullName
+        - email
+        - username
+        - createdAt
+
+    SignUpBody:
+      type: object
+      properties:
+        fullName:
+          type: string
+        email:
+          type: string
+        username:
+          type: string
+        password:
+          type: string
+      required:
+        - fullName
+        - email
+        - username
+        - password
+
+    LoginBody:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      required:
+        - email
+        - password
+
+    AuthResponse:
+      type: object
+      properties:
+        user:
+          $ref: "#/components/schemas/User"
+        token:
+          type: string
+      required:
+        - user
+        - token
+
+    StatsSummary:
+      type: object
+      properties:
+        totalCelebrities:
+          type: integer
+        totalOrders:
+          type: integer
+        totalFans:
+          type: integer
+        totalRevenue:
+          type: number
+      required:
+        - totalCelebrities
+        - totalOrders
+        - totalFans
+        - totalRevenue
+
+    PopularCelebrity:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        imageUrl:
+          type: string
+        category:
+          type: string
+        orderCount:
+          type: integer
+      required:
+        - id
+        - name
+        - imageUrl
+        - category
+        - orderCount
+
+    InitializePaymentBody:
+      type: object
+      properties:
+        orderId:
+          type: integer
+        amount:
+          type: number
+        currency:
+          type: string
+        email:
+          type: string
+        fullName:
+          type: string
+        phone:
+          type: ["string", "null"]
+        redirectUrl:
+          type: string
+      required:
+        - orderId
+        - amount
+        - currency
+        - email
+        - fullName
+        - redirectUrl
+
+    PaymentInitResponse:
+      type: object
+      properties:
+        paymentLink:
+          type: string
+        txRef:
+          type: string
+      required:
+        - paymentLink
+        - txRef
+
+    VerifyPaymentBody:
+      type: object
+      properties:
+        transactionId:
+          type: string
+        orderId:
+          type: integer
+      required:
+        - transactionId
+        - orderId
+
+    PaymentVerifyResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        orderId:
+          type: integer
+        confirmationNumber:
+          type: string
+      required:
+        - status
+        - message
+        - orderId
+        - confirmationNumber

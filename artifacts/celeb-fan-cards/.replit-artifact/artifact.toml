@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "CelebFanCards"
+version = "1.0.0"
+id = "artifacts/celeb-fan-cards"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 24446
+
+[services.development]
+run = "pnpm --filter @workspace/celeb-fan-cards run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/celeb-fan-cards", "run", "build" ]
+publicDir = "artifacts/celeb-fan-cards/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "24446"
+BASE_PATH = "/"

@@ -1,0 +1,61 @@
+Build a standard, production-ready, full-stack website for selling "Celebrity Fan Cards" – digital membership cards that fans can purchase for exclusive access, merch perks, shoutouts, and content tied to specific celebrities.
+
+Use React + Tailwind CSS + shadcn/ui on the frontend and Node.js/Express backend with Replit DB (or PostgreSQL) for storing celebrities, user applications, and orders. Include basic user authentication (sign-up/login). Make it fully responsive, mobile-first, modern, and professional with a dark premium theme (black background, gold/red accents, smooth animations).
+
+Exactly 50 popular celebrities must be included in a database/array. Generate a realistic 2026 list including: Johnny Depp, Cristiano Ronaldo, Lionel Messi, Taylor Swift, Beyoncé, Zendaya, Tom Holland, Dwayne Johnson, Kylie Jenner, Drake, Ariana Grande, Timothée Chalamet, Margot Robbie, Chris Hemsworth, Selena Gomez, The Weeknd, Kim Kardashian, and 35 more current popular actors, singers, athletes, and influencers. For each celeb: name, short bio (1-2 sentences), category (Actor/Singer/Athlete/Influencer), and high-quality placeholder image URL (use Unsplash or lorem picsum with celebrity-style photos).
+
+Site structure (professional standard website):
+
+1. **Sticky Navbar**: Logo ("FanCardHub" or "CelebFanCards"), links (Home, Browse Celebrities, My Cards, Support), Login/Signup button, cart icon.
+
+2. **Hero Section**: Eye-catching banner with celeb photos collage. Headline: "Own Your Favorite Celebrity Fan Card – Official Digital Membership". Subheadline: "Exclusive perks, digital collectible card, and direct fan access. Choose your star and card type." Big "Browse Celebrities" button.
+
+3. **Celebrity Search & Gallery Section** (main feature):
+   - Prominent search bar: "Search celebrities (e.g. Johnny Depp, Taylor Swift...)"
+   - Filterable grid of all 50 celebs with photo, name, and category.
+   - Clicking a celeb opens a modal or dedicated view showing:
+     - Large celeb photo
+     - Bio
+     - "Choose Your Fan Card for [Celeb Name]"
+
+4. **Fan Card Types** (shown per celebrity):
+   - Three clear tiers with prices and benefits:
+     - Basic Fan Card – $19.99 (Digital card, profile badge, basic exclusive updates)
+     - Premium Fan Card – $49.99 (All Basic + merch discount, early access, personalized shoutout)
+     - VIP Fan Card – $99.99 (All Premium + 1-on-1 video message, live stream invite, physical card shipped)
+   - Each tier shows the celeb's photo on the card design preview.
+
+5. **Apply / Purchase Flow**:
+   - After selecting celeb + card type → "Apply for This Fan Card" button.
+   - Form fields: Full Name, Email, Username/Handle, Phone (optional), Shipping Address (for VIP), Any Special Message/Request (textarea).
+   - "Submit Application" → Review order summary (celeb name, card type, price, total).
+
+6. **Payment Method**:
+   - Secure checkout page/modal with:
+     - Credit/Debit Card (Stripe-style form fields)
+     - PayPal button
+     - Apple Pay / Google Pay
+   - Fake order total with taxes.
+   - "Pay Securely" button → success page with confirmation number and "Your Fan Card is being processed – check email".
+
+7. **Customer Support Section** (footer + dedicated page/link):
+   - Live chat placeholder
+   - Email: support@fanCardHub.com
+   - FAQ section (common questions about cards, delivery, refunds)
+   - Phone number (fake but realistic: +1-555-123-4567)
+   - Contact form
+
+8. **Additional Standard Sections**:
+   - Testimonials from fans.
+   - How It Works (3-4 steps: Search → Choose Card → Apply & Pay → Get Card).
+   - Footer with Terms, Privacy Policy, Refund Policy, social icons.
+
+Overall requirements:
+- Strong CTAs everywhere ("Buy Fan Card", "Apply Now").
+- Production-ready: form validation, error handling, loading states, clean code.
+- Database stores the 50 celebs so it's easy to manage.
+- After purchase simulation, show a "My Cards" dashboard preview (fake digital card image with celeb pic).
+- Deployable on Replit with one-click live URL.
+- Make it feel like a real e-commerce fan site – professional, trustworthy, and exciting.
+
+After building, deploy it and give me the live preview link. Suggest any next steps like connecting real Stripe or adding more celebs.

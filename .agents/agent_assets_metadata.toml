@@ -1,0 +1,8 @@
+uploads = []
+outputs = []
+
+[[generated]]
+id = "BCgVmtTFG2oOX8lfVAmzY"
+uri = "file://artifacts/celeb-fan-cards/src/assets/hero-bg.png"
+type = "image"
+title = "Hero collage of celebrity silhouettes"
