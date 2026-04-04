@@ -3,12 +3,26 @@ import { db, usersTable, celebritiesTable } from "@workspace/db";
 import { eq, count } from "drizzle-orm";
 import { logger } from "./lib/logger.js";
 
+async function syncCelebrityImages() {
+  try {
+    for (const celeb of CELEBRITIES) {
+      const [existing] = await db.select().from(celebritiesTable).where(eq(celebritiesTable.name, celeb.name));
+      if (existing && existing.imageUrl !== celeb.imageUrl) {
+        await db.update(celebritiesTable).set({ imageUrl: celeb.imageUrl }).where(eq(celebritiesTable.name, celeb.name));
+        logger.info(`Updated image URL for ${celeb.name}`);
+      }
+    }
+  } catch (err) {
+    logger.error({ err }, "Image sync error");
+  }
+}
+
 function hashPassword(password: string): string {
   return crypto.createHash("sha256").update(password + "celebfancards_salt_2026").digest("hex");
 }
 
 const CELEBRITIES = [
-  { name: "Johnny Depp", category: "Acting", bio: "Iconic American actor known for Pirates of the Caribbean, Edward Scissorhands, and his transformative character roles.", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Johnny_Depp_2020.jpg/400px-Johnny_Depp_2020.jpg", nationality: "American", popularFor: "Pirates of the Caribbean", fanCount: 89000 },
+  { name: "Johnny Depp", category: "Acting", bio: "Iconic American actor known for Pirates of the Caribbean, Edward Scissorhands, and his transformative character roles.", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Johnny_Depp_2020.jpg/800px-Johnny_Depp_2020.jpg", nationality: "American", popularFor: "Pirates of the Caribbean", fanCount: 89000 },
   { name: "Cristiano Ronaldo", category: "Sports", bio: "Portuguese football superstar, 5-time Ballon d'Or winner, and one of the greatest players in history.", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Cristiano_Ronaldo_2018.jpg/400px-Cristiano_Ronaldo_2018.jpg", nationality: "Portuguese", popularFor: "Football/Soccer", fanCount: 620000 },
   { name: "Lionel Messi", category: "Sports", bio: "Argentine football legend, 8-time Ballon d'Or winner and 2022 FIFA World Cup champion.", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Lionel-Messi-Argentina-2022-FIFA-World-Cup_%28cropped%29.jpg/440px-Lionel-Messi-Argentina-2022-FIFA-World-Cup_%28cropped%29.jpg", nationality: "Argentine", popularFor: "Football/Soccer", fanCount: 590000 },
   { name: "Taylor Swift", category: "Music", bio: "Grammy-winning American singer-songwriter known for her storytelling and genre-crossing albums.", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/191125_Taylor_Swift_at_the_2019_American_Music_Awards_%28cropped%29.png/440px-191125_Taylor_Swift_at_the_2019_American_Music_Awards_%28cropped%29.png", nationality: "American", popularFor: "Pop & Country Music", fanCount: 480000 },
@@ -67,6 +81,8 @@ export async function seedDatabase() {
       logger.info("Seeding 50 celebrities...");
       await db.insert(celebritiesTable).values(CELEBRITIES);
       logger.info("Celebrity seed complete");
+    } else {
+      await syncCelebrityImages();
     }
 
     const [existingAdmin] = await db

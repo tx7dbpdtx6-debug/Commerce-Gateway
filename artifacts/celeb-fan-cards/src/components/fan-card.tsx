@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 
 interface FanCardProps {
@@ -11,6 +12,8 @@ interface FanCardProps {
 }
 
 export function FanCard({ name, imageUrl, category, tier = "basic", fanName, cardNumber, className = "" }: FanCardProps) {
+  const [imgError, setImgError] = useState(false);
+
   const getInitials = (name: string) => {
     return name
       .split(" ")
@@ -31,7 +34,7 @@ export function FanCard({ name, imageUrl, category, tier = "basic", fanName, car
     }
   };
 
-  const actualImageUrl = imageUrl || `https://picsum.photos/seed/celeb-${name.replace(/\s+/g, '')}/400/500`;
+  const actualImageUrl = (!imgError && imageUrl) ? imageUrl : `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&size=400&background=1a1a2e&color=d4af37&font-size=0.4&bold=true&format=svg`;
 
   return (
     <motion.div
@@ -50,6 +53,7 @@ export function FanCard({ name, imageUrl, category, tier = "basic", fanName, car
         <img
           src={actualImageUrl}
           alt={name}
+          onError={() => setImgError(true)}
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 filter contrast-125"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
