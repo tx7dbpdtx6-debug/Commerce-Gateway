@@ -121,7 +121,7 @@ export default function Success() {
           You're on the Inside!
         </h1>
         <p className="text-xl text-muted-foreground">
-          Your payment was successful and your fan card is ready.
+          Payment Successful! Your Fan Card has been designed and sent to your email!
         </p>
       </motion.div>
 
@@ -145,11 +145,15 @@ export default function Success() {
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-primary mt-0.5">•</span>
-                You will receive a receipt email shortly
+                A beautifully designed Fan Card image has been sent to your email 🎉
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-primary mt-0.5">•</span>
-                If you ordered a VIP physical card, you will receive shipping updates via email
+                Need help? WhatsApp us at <span className="text-green-400">+1 (773) 280-1545</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-primary mt-0.5">•</span>
+                If you ordered a VIP physical card, shipping updates will arrive via email
               </li>
             </ul>
           </div>

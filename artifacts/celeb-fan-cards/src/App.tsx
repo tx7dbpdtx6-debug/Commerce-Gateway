@@ -16,6 +16,7 @@ import Support from "@/pages/support";
 import Login from "@/pages/auth/login";
 import Signup from "@/pages/auth/signup";
 import NotFound from "@/pages/not-found";
+import Admin from "@/pages/admin";
 
 const queryClient = new QueryClient();
 
@@ -33,6 +34,7 @@ function Router() {
         <Route path="/support" component={Support} />
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
+        <Route path="/admin" component={Admin} />
         <Route component={NotFound} />
       </Switch>
     </Layout>

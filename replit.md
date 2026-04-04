@@ -1,27 +1,62 @@
-# Workspace
+# CelebFanCards
 
-## Overview
+A premium full-stack marketplace where fans browse and purchase digital/physical fan cards for celebrities.
 
-pnpm workspace monorepo using TypeScript. Each package manages its own dependencies.
+## Architecture
 
-## Stack
+**Monorepo**: TypeScript pnpm workspace  
+**Frontend**: React + Vite (`artifacts/celeb-fan-cards/`, port 24446)  
+**Backend**: Express 5 API server (`artifacts/api-server/`, port 8080)  
+**Database**: PostgreSQL + Drizzle ORM (`lib/db/`)  
+**API Types**: Zod schemas (`lib/api-zod/`)  
+**API Client**: TanStack Query hooks (`lib/api-client-react/`)
 
-- **Monorepo tool**: pnpm workspaces
-- **Node.js version**: 24
-- **Package manager**: pnpm
-- **TypeScript version**: 5.9
-- **API framework**: Express 5
-- **Database**: PostgreSQL + Drizzle ORM
-- **Validation**: Zod (`zod/v4`), `drizzle-zod`
-- **API codegen**: Orval (from OpenAPI spec)
-- **Build**: esbuild (CJS bundle)
+## Fan Card Tiers
 
-## Key Commands
+| Tier    | Price   | Details                          |
+|---------|---------|----------------------------------|
+| Basic   | $19.99  | Digital card + collectible badge |
+| Premium | $49.99  | HD card + exclusive access       |
+| VIP     | $99.99  | Metal physical card + perks      |
 
-- `pnpm run typecheck` — full typecheck across all packages
-- `pnpm run build` — typecheck + build all packages
-- `pnpm --filter @workspace/api-spec run codegen` — regenerate API hooks and Zod schemas from OpenAPI spec
-- `pnpm --filter @workspace/db run push` — push DB schema changes (dev only)
-- `pnpm --filter @workspace/api-server run dev` — run API server locally
+## Key Features
 
-See the `pnpm-workspace` skill for workspace structure, TypeScript setup, and package details.
+- 50 celebrities seeded (actors, musicians, athletes) with Wikimedia Commons photos
+- Flutterwave payment integration for secure checkout
+- Nodemailer email delivery of fan card image after payment
+- Admin dashboard at `/admin` (admin@fanCardHub.com / CelebFan2026!)
+- WhatsApp live support button (+1 773-280-1545)
+- Contact form saves messages to `contact_messages` DB table
+- Trust badges, 8 testimonials, and stats bar on home page
+
+## Database Schema
+
+- `users` — registered fans
+- `celebrities` — 50 seeded celebrities
+- `orders` — fan card purchases (status: pending/paid/failed)
+- `contact_messages` — support form submissions
+
+## Admin
+
+- URL: `/admin`
+- Email: `admin@fanCardHub.com`
+- Password: `CelebFan2026!`
+- Stats, Users, Orders, and Messages tabs
+
+## Contact
+
+- WhatsApp: +1 (773) 280-1545
+- Support Email: support@fanCardHub.com
+
+## Environment Variables
+
+- `DATABASE_URL` — PostgreSQL connection string (required)
+- `FLUTTERWAVE_SECRET_KEY` — For payment verification
+- `EMAIL_USER` — Gmail address for sending fan card emails (optional)
+- `EMAIL_PASS` — Gmail app password (optional)
+- `PORT` — Server port
+
+## Workflows
+
+- **API Server**: `PORT=8080 pnpm --filter @workspace/api-server run dev`
+- **Start application**: `PORT=24446 BASE_PATH=/ pnpm --filter @workspace/celeb-fan-cards run dev`

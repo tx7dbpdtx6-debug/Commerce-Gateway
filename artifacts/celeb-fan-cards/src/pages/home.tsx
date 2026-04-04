@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { useGetStatsSummary, useGetPopularCelebrities } from "@workspace/api-client-react";
 import { Button } from "@/components/ui/button";
 import { FanCard } from "@/components/fan-card";
-import { Star, ShieldCheck, Users, Zap, Award, ChevronRight } from "lucide-react";
+import { Star, ShieldCheck, Users, Zap, Award, ChevronRight, Shield, Package, RotateCcw, Bolt } from "lucide-react";
 import heroBg from "@/assets/hero-bg.png";
 
 export default function Home() {
@@ -14,20 +14,50 @@ export default function Home() {
     {
       name: "Sarah J.",
       handle: "@sarah_fanz",
-      content: "Got my VIP physical card for my favorite singer. The holographic finish is insane! It feels so premium.",
+      content: "Got my VIP physical card for Taylor Swift. The holographic finish is insane! It feels so premium — exactly like a real trading card.",
       image: "https://picsum.photos/seed/fan1/100/100"
     },
     {
       name: "Mike T.",
       handle: "@mike_t_sports",
-      content: "As a huge basketball fan, owning an official digital card of my idol is a dream come true. Highly recommend.",
+      content: "Bought a Premium card for Cristiano Ronaldo. Owning an official digital card of my idol is a dream come true. Highly recommend.",
       image: "https://picsum.photos/seed/fan2/100/100"
     },
     {
       name: "Elena R.",
       handle: "@elena_reads",
-      content: "The digital card shimmer effect looks exactly like a real trading card. Such a cool concept!",
+      content: "The digital card shimmer effect looks exactly like a real trading card. Got mine for Zendaya and she loved when I showed her on Instagram!",
       image: "https://picsum.photos/seed/fan3/100/100"
+    },
+    {
+      name: "James K.",
+      handle: "@james_drakefan",
+      content: "I ordered a VIP card for Drake and the physical metal card arrived in perfect condition. The neon design is absolutely fire 🔥",
+      image: "https://picsum.photos/seed/fan4/100/100"
+    },
+    {
+      name: "Priya M.",
+      handle: "@priya_swiftie",
+      content: "Best fan gift I've ever bought! The Basic card for Beyoncé came with all the digital perks. Already ordered my second one for Ariana Grande.",
+      image: "https://picsum.photos/seed/fan5/100/100"
+    },
+    {
+      name: "Carlos D.",
+      handle: "@carlosd_ultras",
+      content: "Messi fan for life. I got the VIP card and the personalized shoutout was worth every penny. This platform is next level.",
+      image: "https://picsum.photos/seed/fan6/100/100"
+    },
+    {
+      name: "Aisha B.",
+      handle: "@aisha_riri",
+      content: "Ordered a Premium Rihanna card as a birthday gift for my sister. She literally screamed when she saw it. 10/10 would order again.",
+      image: "https://picsum.photos/seed/fan7/100/100"
+    },
+    {
+      name: "Tyler W.",
+      handle: "@tylerwatches",
+      content: "Smooth checkout, card arrived in my email instantly. The fan card design for Tom Holland is stunning. Marvel fans need this!",
+      image: "https://picsum.photos/seed/fan8/100/100"
     }
   ];
 
@@ -35,18 +65,25 @@ export default function Home() {
     {
       icon: <Users className="h-6 w-6 text-primary" />,
       title: "Find Your Idol",
-      description: "Browse our exclusive roster of top actors, musicians, and athletes."
+      description: "Browse our exclusive roster of 50+ top actors, musicians, and athletes from around the world."
     },
     {
       icon: <Award className="h-6 w-6 text-primary" />,
       title: "Choose Your Tier",
-      description: "Select from Basic, Premium, or VIP physical card packages."
+      description: "Select from Basic, Premium, or VIP fan card packages with exclusive perks for each level."
     },
     {
       icon: <ShieldCheck className="h-6 w-6 text-primary" />,
       title: "Own the Experience",
-      description: "Get your personalized digital card instantly, securely minted."
+      description: "Get your personalized digital card instantly, sent to your email with a beautiful design."
     }
+  ];
+
+  const trustBadges = [
+    { icon: <Shield className="h-5 w-5" />, label: "Secured by Flutterwave" },
+    { icon: <Bolt className="h-5 w-5" />, label: "256-bit SSL Encryption" },
+    { icon: <RotateCcw className="h-5 w-5" />, label: "Satisfaction Guarantee" },
+    { icon: <Package className="h-5 w-5" />, label: "Instant Digital Delivery" },
   ];
 
   return (
@@ -111,9 +148,30 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Trust Badges */}
+      <section className="border-y border-border/50 bg-card/30 py-5">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-wrap items-center justify-center gap-6 md:gap-12">
+            {trustBadges.map((badge, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="flex items-center gap-2 text-sm text-muted-foreground"
+              >
+                <span className="text-primary">{badge.icon}</span>
+                <span>{badge.label}</span>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Stats Bar */}
       {stats && (
-        <section className="border-y border-border/50 bg-card/50 backdrop-blur-sm py-8 relative z-10">
+        <section className="border-b border-border/50 bg-card/50 backdrop-blur-sm py-8 relative z-10">
           <div className="container mx-auto px-4">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center divide-x divide-border/50">
               <div className="px-4">
@@ -215,27 +273,30 @@ export default function Home() {
             <p className="text-muted-foreground text-lg">What our VIP members are saying.</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {testimonials.map((t, i) => (
               <motion.div 
                 key={i}
                 initial={{ opacity: 0, scale: 0.95 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
+                transition={{ delay: i * 0.08 }}
                 className="bg-card border border-border p-6 rounded-2xl relative"
               >
-                <div className="absolute top-6 right-6 opacity-20">
-                  <Zap className="h-8 w-8 text-primary" />
+                <div className="absolute top-4 right-4 opacity-20">
+                  <Zap className="h-6 w-6 text-primary" />
                 </div>
-                <div className="flex items-center gap-4 mb-6">
-                  <img src={t.image} alt={t.name} className="w-12 h-12 rounded-full object-cover border-2 border-primary/20" />
+                <div className="flex items-center gap-3 mb-4">
+                  <img src={t.image} alt={t.name} className="w-10 h-10 rounded-full object-cover border-2 border-primary/20" />
                   <div>
-                    <p className="font-bold">{t.name}</p>
+                    <p className="font-bold text-sm">{t.name}</p>
                     <p className="text-xs text-primary">{t.handle}</p>
                   </div>
                 </div>
-                <p className="text-muted-foreground italic leading-relaxed">"{t.content}"</p>
+                <div className="flex mb-3">
+                  {[...Array(5)].map((_, s) => <Star key={s} className="h-3 w-3 text-primary fill-primary" />)}
+                </div>
+                <p className="text-muted-foreground italic leading-relaxed text-sm">"{t.content}"</p>
               </motion.div>
             ))}
           </div>

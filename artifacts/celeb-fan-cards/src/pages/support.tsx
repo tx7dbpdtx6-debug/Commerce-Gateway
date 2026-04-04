@@ -11,30 +11,59 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Mail, MessageSquare, Phone } from "lucide-react";
+import { Mail, MessageSquare, Phone, CheckCircle } from "lucide-react";
+
+const WHATSAPP_NUMBER = "17732801545";
+const SUPPORT_EMAIL = "support@fanCardHub.com";
 
 export default function Support() {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setForm(prev => ({ ...prev, [e.target.id]: e.target.value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    // Simulate API call
-    setTimeout(() => {
-      setIsSubmitting(false);
-      toast({
-        title: "Message Sent",
-        description: "Our VIP support team will get back to you shortly.",
+
+    try {
+      const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
+      const res = await fetch(`${baseUrl}/api/contact`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
       });
-      (e.target as HTMLFormElement).reset();
-    }, 1000);
+
+      if (res.ok) {
+        setSubmitted(true);
+        toast({
+          title: "Message Sent!",
+          description: "Our VIP support team will get back to you via WhatsApp shortly.",
+        });
+        setForm({ name: "", email: "", subject: "", message: "" });
+      } else {
+        throw new Error("Failed");
+      }
+    } catch {
+      toast({
+        title: "Error",
+        description: "Failed to send your message. Please try WhatsApp directly.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const faqs = [
     {
       q: "How do I access my digital card?",
-      a: "Once your payment is verified, your digital card will instantly appear in the 'My Cards' section of your dashboard. You can view, screenshot, or showcase it at any time."
+      a: "Once your payment is verified, your digital card will instantly appear in the 'My Cards' section of your dashboard. You'll also receive a beautifully designed fan card via email."
     },
     {
       q: "Is the VIP physical card real?",
@@ -51,6 +80,18 @@ export default function Support() {
     {
       q: "Can I buy cards for multiple celebrities?",
       a: "Absolutely. There is no limit to how many fan cards you can collect. Expand your portfolio and own a piece of every fandom."
+    },
+    {
+      q: "What payment methods do you accept?",
+      a: "We use Flutterwave for secure payment processing, which accepts all major credit/debit cards, bank transfers, and many local payment methods worldwide."
+    },
+    {
+      q: "Will I receive a confirmation email?",
+      a: "Yes! After a successful payment, we automatically generate your personalized fan card design and send it to your email address along with your order confirmation."
+    },
+    {
+      q: "How do I contact support?",
+      a: "You can reach us via the contact form on this page, WhatsApp at +1 (773) 280-1545, or email us at support@fanCardHub.com. We typically respond within 24 hours."
     }
   ];
 
@@ -94,41 +135,58 @@ export default function Support() {
         >
           <h2 className="text-2xl font-bold mb-6">Contact Concierge</h2>
           
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="name">Name</Label>
-              <Input id="name" required className="bg-background/50" />
+          {submitted ? (
+            <div className="text-center py-8">
+              <CheckCircle className="h-16 w-16 text-green-400 mx-auto mb-4" />
+              <h3 className="text-xl font-bold mb-2">Message Received!</h3>
+              <p className="text-muted-foreground">Our VIP support team will get back to you via WhatsApp or email shortly.</p>
+              <Button className="mt-6" onClick={() => setSubmitted(false)}>Send Another Message</Button>
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" required className="bg-background/50" />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="subject">Subject</Label>
-              <Input id="subject" required className="bg-background/50" />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="message">Message</Label>
-              <Textarea id="message" required className="min-h-[120px] resize-none bg-background/50" />
-            </div>
-            <Button 
-              type="submit" 
-              className="w-full bg-primary text-primary-foreground hover:bg-primary/90 mt-4"
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? "Sending..." : "Send Message"}
-            </Button>
-          </form>
+          ) : (
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="name">Name</Label>
+                <Input id="name" required value={form.name} onChange={handleChange} className="bg-background/50" placeholder="Your full name" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <Input id="email" type="email" required value={form.email} onChange={handleChange} className="bg-background/50" placeholder="your@email.com" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="subject">Subject</Label>
+                <Input id="subject" required value={form.subject} onChange={handleChange} className="bg-background/50" placeholder="How can we help?" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="message">Message</Label>
+                <Textarea id="message" required value={form.message} onChange={handleChange} className="min-h-[120px] resize-none bg-background/50" placeholder="Describe your issue or question in detail..." />
+              </div>
+              <Button 
+                type="submit" 
+                className="w-full bg-primary text-primary-foreground hover:bg-primary/90 mt-4"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? "Sending..." : "Send Message"}
+              </Button>
+            </form>
+          )}
 
-          <div className="mt-8 pt-8 border-t border-border grid grid-cols-2 gap-4">
-            <div className="flex items-center gap-3 text-sm text-muted-foreground">
-              <Mail className="h-5 w-5 text-primary" />
-              <span>vip@celebfancards.com</span>
-            </div>
-            <div className="flex items-center gap-3 text-sm text-muted-foreground">
-              <Phone className="h-5 w-5 text-primary" />
-              <span>1-800-FAN-VIP</span>
-            </div>
+          <div className="mt-8 pt-8 border-t border-border grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <a 
+              href={`mailto:${SUPPORT_EMAIL}`}
+              className="flex items-center gap-3 text-sm text-muted-foreground hover:text-primary transition-colors"
+            >
+              <Mail className="h-5 w-5 text-primary flex-shrink-0" />
+              <span>{SUPPORT_EMAIL}</span>
+            </a>
+            <a
+              href={`https://wa.me/${WHATSAPP_NUMBER}?text=Hi%20I%20need%20help%20with%20my%20Fan%20Card`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-3 text-sm text-muted-foreground hover:text-green-400 transition-colors"
+            >
+              <Phone className="h-5 w-5 text-green-400 flex-shrink-0" />
+              <span>+1 (773) 280-1545</span>
+            </a>
           </div>
         </motion.div>
       </div>

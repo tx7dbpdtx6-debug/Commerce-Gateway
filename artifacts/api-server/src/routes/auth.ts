@@ -17,10 +17,8 @@ function hashPassword(password: string): string {
 }
 
 function generateToken(userId: number): string {
-  return crypto
-    .createHash("sha256")
-    .update(`${userId}_${Date.now()}_celebfancards`)
-    .digest("hex");
+  const randomPart = crypto.randomBytes(24).toString("hex");
+  return `${userId}.${randomPart}`;
 }
 
 router.post("/auth/signup", async (req, res): Promise<void> => {
@@ -119,7 +117,9 @@ router.get("/auth/me", async (req, res): Promise<void> => {
     return;
   }
 
-  const userId = req.headers["x-user-id"];
+  const token = authHeader.slice(7);
+  const dotIndex = token.indexOf(".");
+  const userId = dotIndex !== -1 ? token.substring(0, dotIndex) : token;
   if (!userId) {
     res.status(401).json({ error: "Not authenticated" });
     return;

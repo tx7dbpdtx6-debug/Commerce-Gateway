@@ -1,6 +1,6 @@
 import { Router, type IRouter } from "express";
 import { eq } from "drizzle-orm";
-import { db, ordersTable } from "@workspace/db";
+import { db, ordersTable, celebritiesTable } from "@workspace/db";
 import {
   InitializePaymentBody,
   InitializePaymentResponse,
@@ -9,6 +9,7 @@ import {
 } from "@workspace/api-zod";
 import { logger } from "../lib/logger.js";
 import { nanoid } from "../lib/nanoid.js";
+import { sendFanCardEmail } from "../lib/email.js";
 
 const router: IRouter = Router();
 
@@ -121,6 +122,23 @@ router.post("/payment/verify", async (req, res): Promise<void> => {
     })
     .where(eq(ordersTable.id, orderId))
     .returning();
+
+  if (newStatus === "paid" && updatedOrder.email) {
+    const [celeb] = await db
+      .select()
+      .from(celebritiesTable)
+      .where(eq(celebritiesTable.id, updatedOrder.celebId));
+
+    sendFanCardEmail({
+      to: updatedOrder.email,
+      buyerName: updatedOrder.fullName,
+      celebName: updatedOrder.celebName,
+      cardType: updatedOrder.cardType,
+      price: updatedOrder.price,
+      confirmationNumber: updatedOrder.confirmationNumber,
+      celebImageUrl: celeb?.imageUrl ?? "",
+    }).catch((err) => logger.error({ err }, "Failed to send fan card email"));
+  }
 
   res.json(VerifyPaymentResponse.parse({
     status: newStatus,
