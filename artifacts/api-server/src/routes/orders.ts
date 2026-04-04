@@ -16,9 +16,9 @@ import {
 import { nanoid } from "../lib/nanoid.js";
 
 const CARD_PRICES: Record<string, number> = {
-  basic: 19.99,
-  premium: 49.99,
-  vip: 99.99,
+  basic: 1000,
+  premium: 1500,
+  vip: 2500,
 };
 
 const router: IRouter = Router();

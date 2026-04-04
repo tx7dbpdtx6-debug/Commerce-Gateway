@@ -38,9 +38,9 @@ export default function Apply({ params }: { params: { celebId: string; cardType:
   };
 
   const getPrice = () => {
-    if (cardType === "basic") return 19.99;
-    if (cardType === "premium") return 49.99;
-    return 99.99;
+    if (cardType === "basic") return 1000;
+    if (cardType === "premium") return 1500;
+    return 2500;
   };
 
   const handleSubmit = (e: React.FormEvent) => {

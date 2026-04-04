@@ -127,7 +127,7 @@ export default function Home() {
               <Star className="h-4 w-4" /> Official Fan Memberships
             </div>
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-serif font-bold text-white leading-tight">
-              Own a Piece of the <span className="text-gradient-gold">Spotlight</span>
+              Collect Rare Digital Cards of Your <span className="text-gradient-gold">Favorite Celebrities</span>
             </h1>
             <p className="text-lg md:text-2xl text-muted-foreground max-w-2xl mx-auto">
               Exclusive digital and physical fan cards for the world's biggest celebrities. Your VIP pass starts here.
@@ -135,7 +135,7 @@ export default function Home() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-8">
               <Link href="/browse">
                 <Button size="lg" className="text-lg px-8 py-6 w-full sm:w-auto bg-primary text-primary-foreground hover:bg-primary/90 shadow-[0_0_20px_rgba(255,215,0,0.3)] hover:shadow-[0_0_30px_rgba(255,215,0,0.5)] transition-all">
-                  Browse Celebrities <ChevronRight className="ml-2 h-5 w-5" />
+                  Shop Now <ChevronRight className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
               <Link href="/support">

@@ -1,0 +1,65 @@
+I have a CelebFanCards website for digital celebrity fan/collectible cards at https://06efed7e-5f1d-4ba0-ab06-d9aa8e5b62c3-00-1cf51tmbnvdxe.kirk.repl.co/
+
+IMPORTANT: Keep the EXACT same color scheme as the current site. Do not change any background colors, text colors, accent colors, button colors, or card colors at all.
+
+Upgrade the entire site to look modern, premium, and professional while strictly keeping the current colors.
+
+Key requirements:
+
+1. **Pricing Tiers (Update All Cards)**
+   - Basic tier: $1000
+   - Premium tier: $1500
+   - VIP tier: $2500
+   - Assign tiers to different celebrities and show the correct price clearly on every card and in the modal.
+
+2. **Celebrity Images**
+   - Fix all images so they always load correctly (no broken or random pictures like wrong Johnny Depp).
+   - Use reliable direct URLs such as picsum.photos with different seeds or stable celebrity images. Include at least 10 celebrities (e.g., Johnny Depp, Cristiano Ronaldo, Beyoncé, Taylor Swift, Lionel Messi, Zendaya, etc.).
+
+3. **Product Detail Modal – Beautiful Fan Card Preview Before Payment**
+   - When a user clicks any card, open a large, premium modal.
+   - Inside the modal, display a VERY LARGE and beautifully designed version of the exact fan card the person is paying for:
+     - Big high-quality celebrity image styled like a real high-end collectible trading card
+     - Add subtle shine/glow effects, elegant borders, and layered design using ONLY the current site colors
+     - Prominent tier badge (Basic / Premium / VIP)
+     - Large bold celebrity name
+     - Clear price: $1000 for Basic, $1500 for Premium, $2500 for VIP
+     - Short description and any special features
+   - Make the preview exciting and luxurious so the buyer clearly sees what they are buying before paying.
+   - Buttons: "Add to Cart" and a big "Buy Now" button.
+
+4. **Real Flutterwave Payment (Test Mode)**
+   - Add the script: <script src="https://checkout.flutterwave.com/v3.js"></script>
+   - When "Buy Now" is clicked in the modal, trigger FlutterwaveCheckout with these exact details:
+     - public_key: "FLWPUBK-f59cf45ba615d95cda5b1fae895c2a0a-X"
+     - tx_ref: "celebcard-" + Date.now()
+     - amount: the card price (1000, 1500 or 2500)
+     - currency: "NGN"
+     - customer: { email: prompt a simple email input or use "buyer@example.com", name: "Customer" }
+     - payment_options: "card,banktransfer,mobilemoney,ussd"
+     - meta: { tier: "Basic/Premium/VIP", celebrity: name }
+     - On successful payment, show a clear success message: "Payment successful! Your digital fan card has been added to My Collection."
+   - Transactions will appear automatically in the Flutterwave Dashboard → Transactions tab (this is the admin view).
+
+5. **Other Professional Features**
+   - Hero section at the top with headline: "Collect Rare Digital Cards of Your Favorite Celebrities" and a strong "Shop Now" button.
+   - Responsive cards grid with filters (by tier, celebrity, price).
+   - Trending/Featured cards section.
+   - Testimonials section (3-4 fake reviews).
+   - Clean footer with: company name, quick links (About, Shop, My Cards, Contact, Privacy, Terms), social icons (Instagram, X, Facebook, TikTok), copyright "© 2026 CelebFanCards. All rights reserved.", and payment icons (Visa, Mastercard, etc.) — all using current colors.
+
+6. **Overall Polish**
+   - Smooth hover effects, subtle animations, better spacing, modern typography.
+   - Fully responsive on mobile, tablet, and desktop.
+   - Basic cart using localStorage.
+   - Make the whole site feel premium and trustworthy for digital collectibles.
+
+First, analyze the current code and structure. Then apply all these upgrades in one go: fix images, update prices, enhance the modal with a stunning large fan card preview (especially for VIP at $2500), and add the Flutterwave integration.
+
+After finishing, clearly tell me:
+- What you changed (especially the modal fan card design, pricing, and payment code)
+- The exact FlutterwaveCheckout function code used
+- How to test it safely with Flutterwave test cards
+- How transactions appear in my Flutterwave dashboard
+
+Do not change any colors. If you need clarification on anything, ask me before proceeding.

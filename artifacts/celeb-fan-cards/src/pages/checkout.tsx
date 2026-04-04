@@ -108,7 +108,7 @@ export default function Checkout({ params }: { params: { orderId: string } }) {
       public_key: FLW_PUBLIC_KEY,
       tx_ref: txRefRef.current,
       amount: order.price,
-      currency: "USD",
+      currency: "NGN",
       payment_options: "card,ussd,banktransfer",
       customer: {
         email: order.email,
